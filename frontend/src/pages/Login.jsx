@@ -8,10 +8,10 @@ function Login() {
 
     const handleChange = (e) => {
         setForm({
-            ...form,
-            [e.target.name]: e.target.value,
+          ...form,
+          [e.target.name]: e.target.value,
         });
-    };
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,9 +66,6 @@ function Login() {
                     Login
                 </button>
             </form>
-            <p className="text-white text-sm">
-                Don’t have an account? <a href="/register" className="text-blue-400">Register</a>
-            </p>
         </div>
     );
 }

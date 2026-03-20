@@ -18,7 +18,7 @@ def register(request):
     if User.objects.filter(email=email).exists():
         return Response({"error": "User already exists"}, status=400)
 
-    user = User(username=username, email=email)
+    user = User(email=email, username=username)
     user.set_password(password)
     user.save()
 
