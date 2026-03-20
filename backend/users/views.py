@@ -8,6 +8,7 @@ User = get_user_model()
 
 @api_view(['POST'])
 def register(request):
+    username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
 
@@ -17,7 +18,7 @@ def register(request):
     if User.objects.filter(email=email).exists():
         return Response({"error": "User already exists"}, status=400)
 
-    user = User(email=email)
+    user = User(username=username, email=email)
     user.set_password(password)
     user.save()
 

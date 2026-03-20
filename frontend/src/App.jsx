@@ -1,10 +1,18 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+
 function App() {
   return (
-    <div className="bg-black text-white h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-green-400">
-        Tailwind Working 🚀
-      </h1>
-    </div>
+    <BrowserRouter>
+
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
