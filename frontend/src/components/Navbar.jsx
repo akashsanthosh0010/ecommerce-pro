@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Navbar() {
     const token = localStorage.getItem("access");
 
@@ -23,6 +24,7 @@ function Navbar() {
                     </>
                 )}
             </div>
+            <Link to="/cart">Cart 🛒</Link>
         </div>
     );
 }
