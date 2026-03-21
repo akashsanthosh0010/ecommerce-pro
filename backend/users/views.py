@@ -26,7 +26,6 @@ def register(request):
 
 @api_view(['POST'])
 def login(request):
-    print("Request data received:", request.data)
     data = request.data
     user = User.objects.filter(email=data['email']).first()
     print(user.password)

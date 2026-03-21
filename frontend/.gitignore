@@ -23,19 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Python
 __pycache__/
 *.pyc
-*.pyo
-
-# Virtual env
 venv/
-
-# Node
 node_modules/
 dist/
-
-# Misc
-.env
-
 db.sqlite3
