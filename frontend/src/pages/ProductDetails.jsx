@@ -1,17 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
 import { addToCart } from "../utils/cart";
+import { CartContext } from "../context/CartContext";
 
 function ProductDetails() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const { cart, updateCart } = useContext(CartContext);
 
     useEffect(() => {
         api.get(`/products/${id}/`)
             .then((res) => setProduct(res.data))
             .catch((err) => console.log(err));
     }, [id]);
+
+    const handleAddToCart = () => {
+        let updated = [...cart];
+
+        const existing = updated.find(item => item.id === product.id);
+
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            updated.push({ ...product, qty: 1 });
+        }
+
+        updateCart(updated);
+    };
 
     if (!product) return <p className="text-white p-6">Loading...</p>;
 
@@ -34,13 +50,7 @@ function ProductDetails() {
                     ₹{product.price}
                 </p>
 
-                <button
-                    onClick={() => {
-                        addToCart(product);
-                        alert("Added to cart 🛒");
-                    }}
-                    className="mt-6 bg-green-500 px-6 py-2 rounded hover:bg-green-600"
-                >
+                <button onClick={handleAddToCart}>
                     Add to Cart 🛒
                 </button>
             </div>
