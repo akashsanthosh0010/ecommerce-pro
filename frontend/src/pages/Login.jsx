@@ -1,4 +1,5 @@
 import { useState } from "react";
+import api from "../api/axios";
 
 function Login() {
     const [form, setForm] = useState({
@@ -13,30 +14,20 @@ function Login() {
         });
       };
 
-    const handleSubmit = async (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const res = await fetch("http://127.0.0.1:8000/api/auth/login/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(form),
-        });
-
-        const data = await res.json();
-        console.log(data);
-
-        if (res.ok) {
-            localStorage.setItem("access", data.access);
-            alert("Login successful 🚀");
-
-            // redirect (next step)
-            window.location.href = "/dashboard";
-        } else {
-            alert(data.error || "Login failed");
+      
+        try {
+          const res = await api.post("/auth/login/", form);
+      
+          localStorage.setItem("access", res.data.access);
+      
+          alert("Login success 🚀");
+          window.location.href = "/dashboard";
+        } catch (err) {
+          alert("Login failed");
         }
-    };
+      };
 
     return (
         <div className="flex items-center justify-center h-screen bg-gray-900">
