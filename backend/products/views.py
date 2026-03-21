@@ -19,3 +19,15 @@ def get_products(request):
         })
     
     return Response(data)
+
+@api_view(['GET'])
+def get_product(request, id):
+    product = Product.objects.get(id=id)
+
+    return Response({
+        "id": product.id,
+        "name": product.name,
+        "description": product.description,
+        "price": product.price,
+        "image": request.build_absolute_uri(product.image.url) if product.image else None
+    })
