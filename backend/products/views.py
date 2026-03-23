@@ -75,3 +75,29 @@ def remove_from_cart(request, product_id):
     CartItem.objects.filter(user=user, product_id=product_id).delete()
     return Response({"message": "Item Removed"})
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_cart(request):
+    user = request.user
+    product_id = request.data.get('product_id')
+    action = request.data.get('action')
+
+    try:
+        item = CartItem.objects.get(user=user, product_id=product_id)
+
+        if action == "inc":
+            item.quantity += 1
+        elif action == "dec":
+            item.quantity -= 1
+            if item.quantity <= 0:
+                item.delete()
+                return Response({"message": "Item Removed"})
+        
+        item.save()
+        return Response({"message": "Cart updated", "qty": item.quantity})
+
+    except CartItem.DoesNotExist:
+        return Response({"error": "item not found"}, status=404)
+
+
