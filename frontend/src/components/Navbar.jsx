@@ -1,17 +1,31 @@
+import { useEffect, useState } from "react";
+import axios from "../api/axios";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
 
 function Navbar() {
+  const [count, setCount] = useState(0);
   const token = localStorage.getItem("access");
-  const { cart } = useContext(CartContext);
+
+  useEffect(() => {
+    if (token) {
+      fetchCartCount();
+    }
+  }, []);
+
+  const fetchCartCount = async () => {
+    try {
+      const res = await axios.get("/products/cart/");
+      const totalQty = res.data.reduce((sum, item) => sum + item.qty, 0);
+      setCount(totalQty);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("access");
     window.location.href = "/";
   };
-
-  const count = cart.reduce((sum, item) => sum + item.qty, 0);
 
   return (
     <div className="bg-gray-800 p-4 flex justify-between text-white">
@@ -20,18 +34,18 @@ function Navbar() {
       <div>
         {token ? (
           <>
-            <Link to="/dashboard" className="mr-4">Dashboard</Link>
+            <a href="/dashboard" className="mr-4">Dashboard</a>
             <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
-            <Link to="/" className="mr-4">Login</Link>
-            <Link to="/register">Register</Link>
+            <a href="/" className="mr-4">Login</a>
+            <a href="/register">Register</a>
           </>
         )}
       </div>
 
-      <Link to="/cart">Cart 🛒 ({count})</Link>
+      <Link to="/cart">Cart 🛒({count})</Link>
     </div>
   );
 }

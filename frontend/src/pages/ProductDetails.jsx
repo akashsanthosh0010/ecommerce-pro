@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import api from "../api/axios";
 import { addToCart } from "../utils/cart";
 import { CartContext } from "../context/CartContext";
+import axios from "../api/axios";
 
 function ProductDetails() {
     const { id } = useParams();
@@ -15,18 +16,16 @@ function ProductDetails() {
             .catch((err) => console.log(err));
     }, [id]);
 
-    const handleAddToCart = () => {
-        let updated = [...cart];
+    const handleAddToCart = async () => {
+        try {
+            await axios.post("/products/cart/add/", {
+                product_id: product.id,
+            });
 
-        const existing = updated.find(item => item.id === product.id);
-
-        if (existing) {
-            existing.qty += 1;
-        } else {
-            updated.push({ ...product, qty: 1 });
+            alert("Added to cart");
+        } catch (err) {
+            console.log(err);
         }
-
-        updateCart(updated);
     };
 
     if (!product) return <p className="text-white p-6">Loading...</p>;
